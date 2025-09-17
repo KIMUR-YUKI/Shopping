@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>購入完了</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="order-complete">
+        <h1>購入が完了しました！</h1>
+        <p>ご注文ありがとうございます。</p>
+        <h2>注文番号：<span th:text="${orderId}"></span></h2>
+    </div>
+
+    <a href="/products" class="return-link">商品一覧に戻る</a>
+</body>
+</html>

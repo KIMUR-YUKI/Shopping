@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>購入履歴</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <h1>注文履歴</h1>
+<div th:each="entry : ${ordersByDate}">
+    <h3>
+        <span th:text="${entry.key}"></span>の注文履歴
+        （合計：<span th:text="${dailyTotals[entry.key]}"></span> 円）
+    </h3>
+    
+
+    <!-- その日の注文一覧 -->
+    <div th:each="order : ${entry.value}">
+        <!-- 購入日時 -->
+        <p>注文ID: <span th:text="${order.id}"></span></p>
+        <p>購入日時：<span th:text="${#temporals.format(order.orderDate, 'yyyy/MM/dd HH:mm')}"></span></p>
+
+        <!-- 合計金額 -->
+        <p>合計金額：<span th:text="${order.totalPrice}"></span>円</p>
+        
+        <!-- 商品ごとの情報 -->
+        <div th:each="item : ${order.items}" class="order-list">
+            <a th:if="${item.product != null}" th:href="@{/products/{id}(id=${item.product.id})}">
+                <img th:if="${item.product.imagePaths != null and !item.product.imagePaths.isEmpty()}"
+                    th:src="@{'/uploads/' + ${item.product.imagePaths[0]}}"
+                    width="130">
+            </a>
+                
+            <div class="order-list-details">
+                <a th:if="${item.product != null}" th:href="@{/products/{id}(id=${item.product.id})}">
+                    <span th:text="${item.productName}">商品名</span>
+                </a>
+                <span th:text="'数量：' + ${item.quantity}">数量</span>
+                <span th:if="${item.product != null}" th:text="'小計：￥' + ${item.product.price}">小計</span>
+                <span th:unless="${item.product != null}">小計：不明</span>
+            </div>
+        </div>
+        <hr>
+    </div>
+</div>
+    <a href="/products" class="return-link">商品一覧へ戻る</a>
+</body>
+</html>

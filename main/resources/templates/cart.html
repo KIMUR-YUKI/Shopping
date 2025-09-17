@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>カート内容</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="search-bar">
+    <h1>KIMUZON</h1>
+    <!-- 商品検索とカテゴリー選択 -->
+    <form th:action="@{/products}" method="get" class="search-form">
+        <input type="text" name="keyword" placeholder="商品名を検索" th:value="${keyword}" />
+        
+        <select name="category">
+            <option value="">すべてのカテゴリー</option>
+            <option value="本" th:selected="${category == '本'}">本</option>
+            <option value="家電" th:selected="${category == '家電'}">家電</option>
+            <option value="ファッション" th:selected="${category == 'ファッション'}">ファッション</option>
+        </select>
+        
+        <button type="submit">検索</button>
+    </form>
+    <!-- 商品登録・カート・注文履歴へのリンク -->
+    <div class="top-links" th:if="${loginUser != null}" >
+        <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="admin-links">
+            <a href="/products/new">商品を登録する</a>
+        </div>
+        <a href="/orders">注文履歴</a>
+        <a href="/cart/view">カート</a>
+        <span th:text="${loginUser.userName + '( '+ loginUser.role + ')'}" class="userName">ユーザー名</span>
+        <button class="logout-button" onclick="openModal()">ログアウト</button>
+    </div>
+    <!-- ログアウト確認モーダル -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+                <p>本当にログアウトしますか？</p>
+            <div class="modal-buttons">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="confirm-btn">はい</button>
+                </form>
+                <button class="cancel-btn" onclick="closeModal()">キャンセル</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <br>
+    <br>
+    <br>
+    
+
+        <div class="cart-item" th:each="item : ${cartItems}">
+            <!-- 商品画像：商品に画像がある場合のみを表示 -->
+            <a th:href="@{/products/{id}(id=${item.product.id})}">
+                <img th:if="${item.product.imagePaths != null and !item.product.imagePaths.isEmpty()}" alt="商品画像"
+                th:src="@{'/uploads/' + ${item.product.imagePaths[0]}}" 
+                width="250">
+            </a>
+
+            <div class="cart-info">
+
+                <!-- 商品名の表示 -->
+                <a th:href="@{/products/{id}(id=${item.product.id})}">
+                    <h2 th:text="${item.product.name}">商品名</h2>
+                </a>
+                <!-- 商品説明の表示 -->
+                <p th:text="${item.product.description}">商品説明</p>
+                <!-- 単価の表示 -->
+                <p th:text="${'¥' + item.product.price}" >価格</p>
+    
+                <div class="quantity">
+                    <!-- 数量の表示 -->
+                    <form th:action="@{/cart/view/decrease/{id}(id=${item.product.id})}" method="post" style="display:inline;">
+                        <button type="submit">－</button>
+                    </form>
+                    <span th:text="${item.quantity}">数量</span>
+                    <form th:action="@{/cart/view/increase/{id}(id=${item.product.id})}" method="post" style="display: inline;">
+                        <button type="submit">＋</button>
+                    </form>
+                </div>
+    
+                <!-- 小計（価格 × 数量） -->
+                <h3 th:text="${'小計（税込み） ¥' + item.getSubtotal()}">小計</h3>
+                <!-- 削除リンク（productIdを渡してカートから削除） -->
+                
+                    <a th:href="@{/cart/remove/{id}(id=${item.product.id})}"
+                    onclick="return confirm('本当に削除してもいいですか？');">削除</a>
+            </div>
+        </div>
+        <div class="totalPrice">
+            <h3>合計金額:<span th:text="'¥' + ${totalPrice}" style="color: #e53935;"></span></h3>
+        </div>
+    
+        <form th:action="@{/cart/form}" method="get">
+    <div class="buy">
+        <a href="/products" class="return-link">商品一覧に戻る</a>
+        <!-- 合計金額 -->
+        <button type="submit" class="buy-button">レジへ進む</button>
+        </form>
+    </div>
+    <script th:src="@{/js/scroll-toggle.js}"></script>
+    <script th:src="@{/js/cart-button.js}"></script>
+    <script th:src="@{/js/logout-button.js}"></script>
+</body>
+</html>

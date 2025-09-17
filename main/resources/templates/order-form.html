@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>レジでのお会計</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <form class="checkout-form" th:action="@{/cart/checkout}" method="post" th:object="${order}">
+        <label>氏名：<input type="text" th:field="*{name}" required></label><br>
+        <label>郵便番号：<input type="text" th:field="*{postalCode}" required></label><br>
+        <label>住所：<input type="text" th:field="*{address}" required></label><br>
+        <label>電話番号：<input type="tel" th:field="*{phoneNumber}" required></label><br>
+        <label>支払方法：
+            <select th:field="*{paymentMethod}">
+                <option value="クレジットカード">クレジットカード</option>
+                <option value="銀行振込">銀行振込</option>
+                <option value="代金引換">代金引換</option>
+                <option value="コンビニ払い">コンビニ払い</option>
+            </select>
+        </label><br>
+        <label>備考：<textarea th:field="*{note}"></textarea></label><br>
+        <button type="submit">購入決定</button>
+    </form>
+        <div class="cart-item" th:each="item : ${cartItems}" th:id="'item-' + ${item.product.id}">
+            <!-- 商品画像：商品に画像がある場合のみを表示 -->
+            <!-- <a th:href="@{/products/{id}(id=${item.product.id})}">
+                <img th:if="${item.product.imagePath != null}" th:src="@{'/uploads/' + ${item.product.imagePath}}" 
+                width="250">
+            </a> -->
+            <a th:href="@{/products/{id}(id=${item.product.id})}">
+                <img th:if="${item.product.imagePaths != null and !item.product.imagePaths.isEmpty()}" alt="商品画像"
+                th:src="@{'/uploads/' + ${item.product.imagePaths[0]}}" 
+                width="250">
+            </a>
+            
+            
+            <div class="cart-info">
+                
+                <!-- 商品名の表示 -->
+                <a th:href="@{/products/{id}(id=${item.product.id})}">
+                    <h2 th:text="${item.product.name}">商品名</h2>
+                </a>
+                
+                <!-- 商品説明の表示 -->
+                <p th:text="${item.product.description}">商品説明</p>
+                <!-- 単価の表示 -->
+                <p th:text="${'¥' + item.product.price}">価格</p>
+                
+                <div class="quantity">
+                    <!-- 数量の表示 -->
+                    <!-- <form th:action="@{/cart/form/decrease/{id}(id=${item.product.id})}" method="post" style="display:inline;">
+                        <button type="submit">－</button>
+                    </form>
+                    <span th:text="${item.quantity}">数量</span>
+                    <form th:action="@{/cart/form/increase/{id}(id=${item.product.id})}" method="post" style="display: inline;">
+                        <button type="submit">＋</button>
+                    </form> -->
+                    <button type="button" th:attr="onclick=|changeQuantity(${item.product.id}, 'decrease')|">ー</button>
+
+                    <span th:id="'quantity-' + ${item.product.id}">[[${item.quantity}]]</span>
+
+                    <button type="button" th:attr="onclick=|changeQuantity(${item.product.id}, 'increase')|">＋</button>
+
+                </div>
+                
+                
+                <!-- 小計（価格 × 数量）  -->
+                <h3 th:id="'subtotal-' + ${item.product.id}" th:text="'小計（税込み） ¥' + ${item.getSubtotal()}"></h3>
+                
+                
+                
+                <!-- 削除リンク（productIdを渡してカートから削除） -->
+                <!-- <a th:href="@{/cart/api/remove/{productId}(id=${item.product.id})}"
+                onclick="return confirm('本当に削除してもいいですか？');">削除</a>
+                <button type="button" th:attr="onclick=|removeItem(${item.product.id})|"
+                onclick="return confirm('本当に削除してもいいですか？');">削除</button> -->
+                
+                <!-- クリック時にページ遷移を防ぐ -->
+                <!-- 確認後にremoveItem()実行 -->
+                <!-- 見た目を完全にリンクに寄せる -->
+                <a href="javascript:void(0);"
+                    th:attr="onclick=|removeItem(${item.product.id})|"
+                    style="color:blue; text-decoration: underline; cursor: pointer;">削除</a>
+            </div>
+        </div>
+        <!-- 合計金額 -->
+        <h3>ご請求金額:<span id="total-price" th:text="'¥' + ${totalPrice}" style="color: #e53935;"></span></h3>
+        
+        <a href="/products" class="return-link">商品一覧に戻る</a>
+        <script th:src="@{/js/cart-button.js}"></script>
+</body>
+</html>

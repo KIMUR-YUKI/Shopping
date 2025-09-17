@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新規会員登録</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="register">
+    <h2>新規会員登録</h2>
+    <form th:action="@{/register}" th:object="${user}" method="post">
+        <!-- CSRFトークンの追加（Spring Security有効時は必須） -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <label for="userId">ユーザーID:</label>
+        <input type="text" id="userId" th:field="*{userId}"><br>
+        <div class="error" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}" style="color: red;"></div>
+        
+        <label for="userName">ユーザー名:</label>
+        <input type="text" id="userName" th:field="*{userName}"><br>
+        <div class="error" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" style="color: red;"></div>
+        
+        <label for="email">メールアドレス:</label>
+        <input type="email" id="email" th:field="*{email}"><br>
+        <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red;"></div>
+        
+        <label for="password">パスワード:</label>
+        <div class="password-container">
+            <input type="password" id="password" th:field="*{password}">
+            <span class="toggle-password">👁️</span>
+        </div>
+            <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red;"></div>
+        
+        <button type="submit">登録</button>
+    </form>
+</div>
+    <script th:src="@{/js/toggle-password.js}"></script>
+</body>
+</html>

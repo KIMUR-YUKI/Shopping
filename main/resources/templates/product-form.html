@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品登録</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="search-bar">
+    <h1>KIMUZON</h1>
+    <!-- 商品検索とカテゴリー選択 -->
+    <form th:action="@{/products}" method="get" class="search-form">
+        <input type="text" name="keyword" placeholder="商品名を検索" th:value="${keyword}" />
+        
+        <select name="category">
+            <option value="">すべてのカテゴリー</option>
+            <option value="本" th:selected="${category == '本'}">本</option>
+            <option value="家電" th:selected="${category == '家電'}">家電</option>
+            <option value="ファッション" th:selected="${category == 'ファッション'}">ファッション</option>
+            <option value="ゲーム" th:selected="${category == 'ゲーム'}">ゲーム</option>
+            <option value="日用品" th:selected="${category == '日用品'}">日用品</option>
+            <option value="ドラッグ" th:selected="${category == 'ドラッグ'}">ドラッグ</option>
+        </select>
+        
+        <button type="submit">検索</button>
+    </form>
+    <!-- 商品登録・カート・注文履歴へのリンク -->
+    <div class="top-links" th:if="${loginUser != null}" >
+        <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="admin-links">
+            <a href="/products/new">商品を登録する</a>
+        </div>
+        <a href="/orders">注文履歴</a>
+        <a href="/cart/view">カート</a>
+        <span th:text="${loginUser.userName + '( '+ loginUser.role + ')'}">ユーザー名</span>
+    </div>
+</div>
+
+<div class="product-form">
+    <h1>商品登録フォーム</h1>
+    <form th:action="@{/products/new}" th:object="${product}" th:method="post" enctype="multipart/form-data">
+        <label>商品名:<input type="text" th:field="*{name}"></label><br>
+        <label>説明:<textarea th:field="*{description}"></textarea></label><br>
+        <label>価格:<input type="text" th:field="*{price}"></label><br>
+        <label>
+            <select th:field="*{category}">
+                <option value="本">本</option>
+                <option value="家電">家電</option>
+                <option value="ファッション">ファッション</option>
+                <option value="ゲーム">ゲーム</option>
+                <option value="日用品">日用品</option>
+                <option value="ドラッグ">ドラッグ</option>
+                <option value="その他">その他</option>
+            </select>
+        </label><br>
+
+        <!-- 画像ファイル選択 -->
+        <label>商品画像:
+            <input type="file" name="imageFiles" multiple>
+        </label><br>
+        <button type="submit">登録</button>
+    </form>
+    <a href="/products" class="return-link">一覧に戻る</a>
+
+</div>
+    <script th:src="@{/js/scroll-toggle.js}"></script>
+</body>
+</html>

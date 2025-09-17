@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品詳細</title>
+    <!-- Bootstrap.CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+</head>
+<body>
+<div class="search-bar">
+    <h1>KIMUZON</h1>
+    <!-- 商品検索とカテゴリー選択 -->
+    <form th:action="@{/products}" method="get" class="search-form">
+        <input type="text" name="keyword" placeholder="商品名を検索" th:value="${keyword}" />
+        
+        <select name="category">
+            <option value="">すべてのカテゴリー</option>
+            <option value="本" th:selected="${category == '本'}">本</option>
+            <option value="家電" th:selected="${category == '家電'}">家電</option>
+            <option value="ファッション" th:selected="${category == 'ファッション'}">ファッション</option>
+            <option value="TVゲーム" th:selected="${category == 'TVゲーム'}">TVゲーム</option>
+            <option value="パソコン・周辺機器" th:selected="${category == 'パソコン・周辺機器'}">パソコン・周辺機器</option>
+            <option value="食品・食料・お酒" th:selected="${category == '食品・食料・お酒'}">食品・食料・お酒</option>
+        </select>
+        
+        <button type="submit">検索</button>
+    </form>
+    <!-- 商品登録・カート・注文履歴へのリンク -->
+    <div class="top-links" th:if="${loginUser != null}" >
+        <div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="admin-links">
+            <a href="/products/new">商品を登録する</a>
+        </div>
+        <a href="/orders">注文履歴</a>
+        <a href="/cart/view">カート</a>
+        <span th:text="${loginUser.userName + '( '+ loginUser.role + ')'}" class="userName">ユーザー名</span>
+        <button class="logout-button" onclick="openModal()">ログアウト</button>
+    </div>
+    <!-- ログアウト確認モーダル -->
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <p>本当にログアウトしますか？</p>
+            <div class="modal-buttons">
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="confirm-btn">はい</button>
+                </form>
+                <button class="cancel-btn" onclick="closeModal()">キャンセル</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="product-detail">
+<!-- メイン画像スライダー -->
+    <div id="productCarousel" class="carousel slide" data-bs-ride="false">
+        <!-- インジケーター -->
+        <div class="thumbnail-indicators">
+            <button type="button" th:each="imgPath, stat : ${product.imagePaths}"
+            th:attr="data-bs-target='#productCarousel',data-bs-slide-to=${stat.index},
+            class=${stat.index == 0 ? 'active' : ''}" aria-current="true"
+                    th:attrappend="aria-label='Slide' + ${stat.index + 1}">
+                <img th:src="@{'/uploads/' + ${imgPath}}" alt="サムネイル画像" >
+            </button>
+        </div>
+
+        <div class="carousel-inner">
+            <div th:each="imgPath, stat : ${product.imagePaths}"
+                th:class="'carousel-item' + (${stat.index} == 0 ? ' active' : '')">
+                <img th:src="@{'/uploads/' + ${imgPath}}" class="d-block w-100"alt="商品画像">
+            </div>
+        </div>
+
+<!-- ナビゲーション -->
+    <button  class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">前へ</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">次へ</span>
+    </button>
+    </div>
+    
+    <!-- <img th:if="${product.imagePath != null}" th:src="@{'/uploads/' + ${product.imagePath}}" width="350"> -->
+    <h2 th:text="${product.name}">商品名</h2>
+    <p class="price" th:text="${'¥' + product.price}" >価格</p>
+    <p>カテゴリ：<span th:text="${product.category}">カテゴリ</span></p>
+    <hr>
+    <p>この商品について：<span th:text="${product.description}">説明</span></p>
+    <form th:action="@{/cart/add/detail}" method="post">
+        <input type="hidden" name="productId" th:value="${product.id}" />
+        <button class="cart-button">カートに追加</button>
+    </form>
+    <a href="/products" class="return-link">商品一覧に戻る</a>
+</div>
+
+<script th:src="@{/js/scroll-toggle.js}"></script>
+<script th:src="@{/js/product-carousel.js}"></script>
+<script th:src="@{/js/logout-button.js}"></script>
+<!-- Bootstrap JS（ページ末尾に書く方法も可） -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script> -->
+</body>
+</html>

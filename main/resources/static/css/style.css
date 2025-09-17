@@ -1,0 +1,690 @@
+/* 商品一覧グリッドの全体の設定 */
+.product-grid{
+    display: grid;                          /*グリッドレイアウト*/
+    grid-template-columns: repeat(5, 1fr);  /*横に5列 */
+    gap: 10px;                              /*各アイテム間の隙間を20pxにする*/
+    padding: 100px;                          /*グリッド全体の余白*/
+}
+
+/* 商品1つ1つのカードの見た目 */
+.product-card{
+    border: 1px solid #ccc;             /*外枠を薄いグレー囲む*/
+    border-radius: 8px;                   /*角を少し丸くする*/
+    padding: 10px;                        /*カード内の余白*/
+    text-align: center;                   /*中央寄せ*/
+    background-color: #fff;             /*背景は白*/
+    transition: box-shadow 0.3s ease;     /*ホバー時の影を滑らかに変化させる*/
+}
+
+
+/*マウスを乗せたときに影をつける*/
+.product-card:hover{
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);/*薄い影をつけて浮き上がって見えるように*/
+}
+
+/* 商品画像のスタイル */
+.product-card img{
+    max-width: 100%;                    /*横幅がカードからはみ出さないように*/
+    height: auto;                       /*高さは自動で調整*/
+    object-fit: contain;                /*画像がつぶれないように調整*/
+}
+
+/* 商品名のスタイル */
+.product-card h3 {
+    font-size: 16px;                    /*文字サイズ*/
+    margin: 10px 0 5px;                 /*上10px、下5pxの余白*/
+}
+
+/* 商品価格などの説明部分 */
+.product-card p {
+    font-size: 14px;                    /*少し小さめの文字*/
+    color: #666;                      /*グレーで目立ちすぎないように*/
+    margin-bottom: 10px;                /*下に余白*/
+}
+
+/* 価格を強調するスタイル */
+.product-card .price {
+    font-weight: bold;                  /*太字*/
+    font-size: 20px;
+    color: #e53935;                   /*赤っぽい色で目立たせる*/
+}
+
+.search-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;              /* 横並びにする */
+    justify-content: center;   /* 横方向の中央揃え */
+    align-items: center;       /* 縦方向の中央揃え */
+    gap: 40px;                 /* 検索フォームとリンクの間に余白 */
+    margin-bottom: 60px;       /* 下に余白 */
+    flex-wrap: wrap;           /* 画面幅が狭いときは折り返す */
+    background-color: #5d9de1;
+}
+/* 検索フォームを中央に揃える */
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;                      /*リンク同士の間隔*/
+}
+
+/* テキストボックスとセレクトボックスの見た目を整える */
+.search-form input,             /*商品名の検索入力欄*/
+.search-form select{            /*カテゴリの選択ボックス*/
+    padding: 6px 12px;          /*内側の余白を設定して文字が詰まらないようにする*/
+    font-size: 16px;            /*文字を大きくして読みやすくする*/
+}
+
+/*検索ボタンのスタイル*/
+.search-form button{
+    padding: 6px 16px;         /*ボタンの上下左右の余白*/
+    font-size: 16px;           /*ボタンの文字サイズ*/
+    cursor: pointer;           /*カーソルをポインターにしてクリック可能感を出す*/
+}
+/* 非表示状態（上からフェードアウト＋移動） */
+.search-bar.hide{
+    transform: translateY(-100%); /*上に押し上げて消す*/
+    opacity: 0;                   /*フェードアウト*/
+    pointer-events: none;         /*クリック操作不可に*/
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+
+/* 商品登録、注文履歴、カート機能を右上にそろえる */
+.top-links{
+    display: flex;                      /*横並びにする*/
+    gap: 20px;                          /*リンク同士の間隔*/
+}
+
+
+
+.top-links a{
+    text-decoration: none;              /*下線消す*/
+    color: #333;                      /*テキスト色*/
+    font-weight: bold;                  /*太字*/
+    padding-top: 6px;
+    padding-right: 12px;
+    padding-bottom: 6px;
+    padding-left: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    transition: background-color 0.2s;
+}
+
+.top-links a:hover {
+    background-color: #e0e0e0;
+    color: #007bff;                   /*ホバー時の色変化*/
+}
+.admin-links{
+    display: flex;
+    align-items: center;
+}
+
+.userName{
+    color: white;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    background-color: #4e5881;
+    padding: 6px 12px;
+}
+
+.logout-button{
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover{
+    background-color: #e67777;
+}
+
+.modal{
+    display: none;/*最初は非表示*/
+    position: fixed;
+    z-index: 999; /*最前面に出す*/
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /*半透明の背景*/
+}
+
+.modal-content{
+    background: #cbf5f5;
+    padding: 20px;
+    margin: 15% auto;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+}
+
+.modal-buttons{
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 30px;
+}
+
+.product-detail{
+    text-align: center;
+    padding: 100px;
+    object-fit: contain;
+    width: 350;
+}
+
+.product-detail .price{
+    font-weight: bold;                  /*太字*/
+    font-size: 20px;
+    color: #e53935;                   /*赤っぽい色で目立たせる*/
+}
+
+
+/*カートページのデザイン*/
+.cart-item img{
+    margin-right: 20px; /*画像とテキストの間に余白*/
+}
+.cart-item{
+    display: flex;      /*横並びに配置*/
+    align-items: center;/*縦の中央に揃える*/
+    padding: 10px 5px;    /*上下に余白*/
+    border-bottom: 1px solid #ddd;/*下に区切り線*/
+}
+
+.cart-info{
+    display: flex;  /*横並びに配置*/
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.cart-info h3{
+    text-align: right;  /*右揃え*/
+    margin-right: 40px; /*右に余白*/
+}
+
+/* レジへ進むボタンの位置 */
+.buy{
+    display: flex;
+    justify-content: space-between; /*左右に配置*/
+    align-items: center;            /*縦位置揃えるなら*/
+    text-align: right;
+    margin-right: 40px;
+    margin-top: 40px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* レジへ進むボタンのデザイン */
+.buy-button{
+    background-color: rgb(247, 178, 5);
+    transition: box-shadow 0.3s ease;     /*ホバー時の影を滑らかに変化させる*/
+    border-radius: 20px;        /*角を丸くする*/
+    width: 150px;               /*幅*/
+    height: 50%;                /*高さ*/
+}
+
+/*マウスを乗せたときに影をつける*/
+.buy-button:hover{
+    box-shadow: 0 0 50px rgb(151, 151, 30);/*薄い影をつけて浮き上がって見えるように*/
+    background-color: rgb(151, 151, 30);
+}
+
+
+/* 商品一覧へ戻るリンクのデザイン */
+.return-link {
+    display: inline-block;      /*リンクをインラインブロック要素として扱い、サイズや余白の調整を可能にする*/
+    background-color: #007BFF;/*背景色を鮮やかな青色に設定*/
+    color: white;               /*テキストの色を白にする*/
+    padding: 10px 20px;           /*内側の余白を上下10px、左右20pxに設定しボタンのような見た目にする*/
+    text-decoration: none;        /*リンクに下線を表示しない*/
+    border-radius: 8px;           /*角を8pxの半径で丸くして、柔らかい印象にする*/
+    transition: background-color 0.3s ease;/*背景色の変化を0.3秒かけて滑らかにする（ホバー時の変化）*/
+    margin-top: 30px;             /*上に30pxの余白を空け、他の要素と間隔を取る*/
+}
+
+.return-link:hover {
+    background-color: #0056b3;
+}
+
+.cart-button{
+    display: inline-block;
+    background-color: yellow;
+    color: black;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    margin-top: 30px;
+}
+
+.cart-button:hover{
+    background-color: rgb(143, 143, 19);
+}
+
+.totalPrice{
+    text-align: right;
+    margin-right: 35px;
+}
+
+
+.product-form {
+    max-width: 600px;/*最大横幅を600pxに制限（画面が広くてもこれ以上広がらない）*/
+    margin: 140px auto 60px auto;/*上に余白を広くとって中央寄せ。上140px、下60px、左右は自動*/
+    padding: 40px;/*中身と枠の間の余白を確保*/
+    background-color: #ffffff;/*白背景*/
+    border-radius: 12px;/*角を丸く(12px)*/
+    box-shadow: 0 6px 24px rgba(0, 123, 255, 0.15);/*青系の影をつけてモダンな雰囲気に*/
+    font-family: 'Helvetica Neue', sans-serif;/*スタイリッシュなフォントに設定*/
+}
+
+.product-form label {
+    display: block;/*ブロック要素にして改行させる*/
+    margin-bottom: 20px;/*ラベルの下に余白*/
+    color: #333;/*濃いグレーで読みやすく*/
+    font-size: 16px;/*入力する文字のサイズ*/
+    font-weight: 600;/*少し太めのフォント*/
+}
+
+.product-form input[type="text"],
+.product-form textarea,
+.product-form select,
+.product-form input[type="file"] {
+    width: 100%;/*横幅いっぱいに広げる*/
+    padding: 12px 14px;/*中の余白（上下12px・左右14px）*/
+    margin-top: 8px;/*上に少しスペース*/
+    font-size: 16px;/*読みやすい文字サイズ*/
+    border: 1px solid #cbd5e0;/*淡い青グレーの境界線*/
+    border-radius: 8px;/*角丸にして柔らかく*/
+    background-color: #f0f8ff;/*アリスブルー：優しい青*/
+    box-sizing: border-box;/*パディングを含めてサイズを調整*/
+    transition: border-color 0.3s ease;/*フォーカス時の変化をスムーズに*/
+}
+
+.product-form input:focus,
+.product-form textarea:focus,
+.product-form select:focus {
+    border-color: #1e90ff;/*境界線が明るい青に変わる*/
+    outline: none;/*デフォルトのアウトラインを消す*/
+}
+
+.product-form textarea {
+    height: 120px;/*高さを指定して固定*/
+    resize: vertical;/*上下方向だけリサイズできるように*/
+}
+
+.product-form button[type="submit"] {
+    width: 100%;/*横幅いっぱいに*/
+    background-color: #016857;/*明るめの青*/
+    color: white;/*文字は白でコンストラクト確保*/
+    font-size: 18px;/*少し大きめの文字サイズ*/
+    padding: 14px;/*ボタンの中の余白*/
+    border: none;/*境界線をなくす*/
+    border-radius: 10px;/*角丸で親しみやすく*/
+    cursor: pointer;/*ホバー時にポインターを表示*/
+    font-weight: bold;/*太字でしっかり目立たせる*/
+    margin-top: 20px;/*上に余白*/
+    transition: background-color 0.3s ease;/*色がなめらかに変わる*/
+}
+
+.product-form button[type="submit"]:hover {
+    background-color: #014f42;/*濃い緑に変化して「押せそう感」アップ*/
+}
+
+/* 注文完了ページのデザイン */
+.order-complete{
+    max-width: 600px; /*表示幅を制限して読みやすく*/
+    margin: 100px auto; /*上下に余白、中央寄せ*/
+    padding: 40px;
+    background-color: #f8f8f8;
+    border-radius: 16px; /*角を丸く*/
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /*柔らかい影*/
+    text-align: center;
+    font-family: "Helvetica", "Arial", sans-serif;
+
+}
+
+/* タイトル */
+.order-complete h1{
+    font-size: 2em;
+    color: #2e7d32;
+    margin-bottom: 20px;
+}
+
+/*注文番号*/
+.order-complete h2{
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 10px;
+}
+
+/*メッセージ*/
+.order-complete p{
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+/* 注文履歴の情報のデザイン */
+.order-list{
+    display: flex;      /*画像と商品詳細を横並びにする*/
+    align-items: center;/*縦方向の中央揃え（画像とテキストの高さが違う場合）*/
+    margin-bottom: 20px;/*各商品リストの下に余白を追加*/
+    padding: 10px;  /*必要であれば内側にパディング*/
+    border: 1px solid #eee; /*各商品リストの区切りを見やすくするための例*/
+}
+
+/*注文履歴の画像*/
+.order-list img{
+    margin-right: 20px; /*画像と商品情報の間にスペース*/
+}
+
+/*注文履歴の詳細情報*/
+.order-list-details{
+    display: flex;
+    flex-direction: column; /*商品名、数量、小計を縦に並べる*/
+    justify-content: center; /*縦方向の中央揃え（必要であれば）*/
+}
+
+/* 注文フォームの全体デザイン（中央寄せ + 枠 + 影） */
+.checkout-form{
+    max-width: 700px; /*最大幅を指定*/
+    margin: 30px auto; /*上下30px、左右中央寄せ*/
+    padding: 20px; /*内側の余白*/
+    background-color: #fdfdfd;/*背景色（白に近い）*/
+    border-radius: 12px; /*角を丸くする*/
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1); /*軽い影を付けて立体感を出す*/
+}
+
+/* ラベル（項目名）とそれに続く入力欄のセット */
+.checkout-form label {
+    display: block; /*ブロック要素として表示*/
+    margin-bottom: 10px; /*各ラベル下に余白*/
+    font-weight: bold; /*太字にして強調*/
+    color: #333; /*濃いグレー文字*/
+}
+
+/* テキスト入力欄やセレクトボックスのスタイル */
+.checkout-form input[type="text"],
+.checkout-form input[type="tel"],
+.checkout-form textarea,
+.checkout-form select {
+    width: 100%; /*幅100%にして統一感を出す*/
+    padding: 10px; /*内側余白*/
+    margin-top: 4px; /*ラベルと少し離す*/
+    margin-bottom: 16px; /*次の項目との間隔*/
+    border: 1px solid #ccc;/*薄いグレーの枠線*/
+    border-radius: 8px; /*角丸*/
+    font-size: 16px; /*読みやすい文字サイズ*/
+    box-sizing: border-box; /*パディング含めた幅計算*/
+}
+
+/* 備考欄などのテキストエリアの高さ設定 */
+.checkout-form textarea {
+    height: 100px; /*初期高さを指定*/
+    resize: vertical; /*垂直方向だけリサイズ可能*/
+}
+
+/* 購入決定ボタンのスタイル */
+.checkout-form button[type="submit"] {
+    background-color: #007bff; /*ブルー*/
+    color: white; /*文字色は白*/
+    padding: 12px 24px; /*内側余白*/
+    font-size: 16px; /*標準よりやや大きめ*/
+    border: none; /*枠線なし*/
+    border-radius: 8px; /*角丸ボタン*/
+    cursor: pointer; /*マウスカーソルを指に*/
+    transition: background-color 0.2s ease; /*ホバー時に色変化を滑らかに*/
+}
+
+/* ボタンにマウスを乗せたときの色変化 */
+.checkout-form button[type="submit"]:hover {
+    background-color: #0056b3; /*濃い青に変化*/
+}
+
+#productCarousel {
+    max-width: 400px;       /* 画像の最大幅に合わせる */
+    margin: 0 auto;         /* カルーセル自体を中央に配置 */
+    position: relative;     /* ボタンの絶対配置の基準に */
+    padding-bottom: 80px;   /*インジケーター分の余白を追加*/
+}
+
+#productCarousel .carousel-control-prev,
+#productCarousel .carousel-control-next {
+    width: 5%;              /* ボタンの幅調整 */
+    top: 50%;               /* 縦の中央 */
+    transform: translateY(-50%); /* 正確に中央に */
+    opacity: 0.7;           /* 半透明で見やすく */
+}
+
+#productCarousel .carousel-control-prev:hover,
+#productCarousel .carousel-control-next:hover {
+    opacity: 1;             /* ホバー時にくっきり */
+}
+
+#productCarousel img {
+    max-width: 100%;        /* カルーセル幅いっぱいに */
+    height: auto;           /* 縦横比を維持 */
+    display: block;
+    margin: 0 auto;
+}
+
+
+/* サムネイルインジケーター */
+.thumbnail-indicators {
+    position: absolute; /*親要素のカルーセルを基準に配置*/
+    bottom: 0;
+    left: 50%; /*左から50%の位置に移動*/
+    transform: translateX(-50%); /*中央寄せ*/
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.thumbnail-indicators button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+.thumbnail-indicators img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    opacity: 0.6;
+    transition: opacity 0.3s, transform 0.3s;
+    
+}
+
+.thumbnail-indicators .active img {
+    opacity: 1;
+    transform: scale(1.05);
+    border: 2px solid #007bff; /*アクティブなインジケーターのボーダー*/
+}
+
+/*選択されてないサムネイル画像の上にマウスを置いたときのアクション*/
+.thumbnail-indicators button:not(.active):hover img{
+    opacity: 0.8; /*ホバー時に少し明るく*/
+    transform: scale(1.03); /*少し拡大*/
+}
+
+
+
+/* カルーセルのナビゲーションボタン */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明の背景 */
+    border-radius: 50%; /* 丸くする */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    background-color: rgba(0, 123, 255, 0.8); /* ホバー時の色 */
+    transform: translateY(-50%) scale(1.1); /* ホバー時に少し拡大 */
+}
+
+/* 矢印アイコンの色を白に統一 */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1); /* 白くする */
+    width: 20px;
+    height: 20px;
+}
+
+.product-edit {
+    max-width: 600px;/*最大横幅を600pxに制限（画面が広くてもこれ以上広がらない）*/
+    margin: 20px auto 60px auto;/*上に余白を広くとって中央寄せ。上20px、下60px、左右は自動*/
+    padding: 40px;/*中身と枠の間の余白を確保*/
+    background-color: #698a9e;/*白背景*/
+    border-radius: 12px;/*角を丸く(12px)*/
+    box-shadow: 0 6px 24px rgba(0, 123, 255, 0.15);/*青系の影をつけてモダンな雰囲気に*/
+    font-family: 'Helvetica Neue', sans-serif;/*スタイリッシュなフォントに設定*/
+}
+
+.product-edit label {
+    display: block;/*ブロック要素にして改行させる*/
+    margin-bottom: 20px;/*ラベルの下に余白*/
+    color: #333;/*濃いグレーで読みやすく*/
+    font-size: 16px;/*入力する文字のサイズ*/
+    font-weight: 600;/*少し太めのフォント*/
+}
+
+.product-edit input[type="text"],
+.product-edit textarea{
+    width: 100%; /*横幅いっぱいに広げる*/
+    padding: 12px 14px;/*中の余白（上下12px・左右14px）*/
+    margin-top: 8px;/*上に少しスペース*/
+    font-size: 16px;/*読みやすい文字サイズ*/
+    border: 1px solid #cbd5e0;/*淡い青グレーの境界線*/
+    border-radius: 8px;/*角丸にして柔らかく*/
+    background-color: #f0f8ff;/*アリスブルー：優しい青*/
+    box-sizing: border-box;/*パディングを含めてサイズを調整*/
+    transition: border-color 0.3s ease;/*フォーカス時の変化をスムーズに*/
+}
+
+.product-edit input:focus,
+.product-edit textarea:focus{
+    border-color: #1e90ff;/*境界線が明るい青に変わる*/
+    outline: none;/*デフォルトのアウトラインを消す*/
+}
+
+.product-edit textarea{
+    height: 80px;/*横幅いっぱいに*/
+    resize: vertical;/*上下方向だけリサイズできるように*/
+}
+
+.product-edit button{
+    width: 100%;/*横幅いっぱいに*/
+    background-color: yellow;/*背景色は黄色*/
+    font-size: 18px;/*少し大きめの文字サイズ*/
+    padding: 10px; /*ボタンの中の余白*/
+    border: none;/*ボタンの境界線をなくす*/
+    border-radius: 10px;/*角丸で親しみやすく*/
+    cursor: pointer;/*ホバー時にポインターを表示（手に変わる） */
+    font-weight: bold;/*太字でしっかり目立たせる*/
+    transition: background-color 0.3s ease;/*色がなめらかに変わる*/
+}
+
+.product-edit button:hover{
+    background-color: blanchedalmond;
+}
+
+/*新規登録パスワード可視化機能*/
+.password-container{
+    position: relative;
+    display: flex;
+    align-items: center;/*アイコンと入力欄を縦中央揃え*/
+    width: 80%;/*他のユーザー名やメールなどのinputと同じ幅に合わせる*/
+}
+
+
+.password-container input {
+    flex: 1;/*アイコン以外の幅をすべて使う*/
+    padding: 5px 14px;/*中の余白（上下12px・左右14px）*/
+    margin-top: 8px;/*上に少しスペース*/
+    font-size: 16px;/*読みやすい文字サイズ*/
+    border: 1px solid #cbd5e0;/*淡い青グレーの境界線*/
+    border-radius: 8px;/*角丸にして柔らかく*/
+    background-color: #f0f8ff;/*アリスブルー：優しい青*/
+    box-sizing: border-box;/*パディングを含めてサイズを調整*/
+    transition: border-color 0.3s ease;/*フォーカス時の変化をスムーズに*/
+    
+} 
+
+.toggle-password{
+    position: absolute;
+    right: 10px;/*目のアイコン位置を右端に寄せる*/
+    top: 50%;
+    transform: translateY(-50%);/*目のアイコン移動*/
+    cursor: pointer;/*目のアイコンの上にマウスを乗せるとポインターに変わる*/
+    /*user-select:none; テキスト選択を無効にする */
+}
+
+/* 新規会員登録のデザイン */
+.register{
+    max-width: 600px; 
+    margin: 30px auto 60px auto;/*上に余白を広く中央寄せ。上140px、下60px、左右は自動*/
+    padding: 40px; /*中身と枠の間の余白を確保*/
+    background-color: #a6d69e;
+    border-radius: 12px;/*角を丸く(12px)*/
+    box-shadow: 0 6px 24px rgba(0, 123, 255, 0.15);/*青色の影をつけてモダンな雰囲気に*/
+    font-family: 'Helvetica Neue', sans-serif;/*スタイリッシュなフォントに設定*/
+}
+
+.register label{
+    display: block;/*ブロック要素にして改行させる*/
+    margin-top: 70px ;
+    margin-bottom: 5px;/*ラベルの下に余白*/
+    color: #333;/*濃いグレーで読みやすく*/
+    font-size: 16px;/*入力する文字のサイズ*/
+    font-weight: 600;/*少し太めのフォント*/
+}
+
+.register input[type="text"],
+.register input[type="email"] {
+    width: 80%;/*横幅いっぱいに広げる*/
+    padding: 5px 14px;/*中の余白（上下12px・左右14px）*/
+    margin-top: 8px;/*上に少しスペース*/
+    font-size: 16px;/*読みやすい文字サイズ*/
+    border: 1px solid #cbd5e0;/*淡い青グレーの境界線*/
+    border-radius: 8px;/*角丸にして柔らかく*/
+    background-color: #f0f8ff;/*アリスブルー：優しい青*/
+    box-sizing: border-box;/*パディングを含めてサイズを調整*/
+    transition: border-color 0.3s ease;/*フォーカス時の変化をスムーズに*/
+}
+
+.register button[type="submit"] {
+    width: 100%;/*横幅いっぱいに*/
+    margin-top: 40px;
+    background-color: #0056b3;
+    color: white;
+    border-radius: 20px;/*角丸にして柔らかく*/
+    font-size: 18px;/*少し大きめのサイズ*/
+    padding: 14px; /*ボタンの中の余白*/
+    border: none;/*境界線をなくす*/
+    cursor: pointer;
+    transition: background-color 0.2s ease; /*ホバー時に色変化を滑らかに*/
+
+}
+
+.register button[type="submit"]:hover{
+    background-color: #002f60;
+}
+
